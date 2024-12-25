@@ -10,7 +10,7 @@ The dialog started with:
 
 > Take a look at @reader-api  and particularly on the section "Proposed Solution". What functions from @api.ex must go to `apps/explorer/lib/explorer/chain/arbitrum/reader/api/messages.ex`?
 
-The consequent messages:
+The consequent prompts:
 
 > Yes, create the module `Explorer.Chain.Arbitrum.Reader.API.Messages` and move the functions listed above.
 
@@ -22,7 +22,7 @@ The consequent messages:
 
 > Take a look at "High-level Scope of Changes" in@reader-api and refactor modules listed in the item 1.
 
-Afer the previous step manual editing of files was required since some of affected functions was refactored incorrectly. That is why it was decided to make the next steps file by file.
+After the previous prompts, manual editing of files was required since some of affected functions was refactored incorrectly. That is why it was decided to make the next steps file by file.
 
 > Take a look at "High-level Scope of Changes" in @reader-api  and adjust the file `arbitrum.md` listed in the item 2.
 
