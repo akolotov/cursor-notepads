@@ -16,7 +16,7 @@ The dialog started with:
 > 
 > Think step by step and provide your view on this. Don't implement any changes yet. 
 
-The consequent messages:
+The consequent prompts:
 
 > Thanks for recommendation, let's omit them so far. Let's implement the step 1 from "Changes in the reader functionality"
 
