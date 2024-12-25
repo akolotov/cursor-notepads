@@ -11,18 +11,20 @@ The Composer mode: agent
 The dialog started with:
 
 > Take a look at @PR-batches-for-datahash  and @arbitrum.md . Consider are listed to be updated in the notepad: @arbitrum_controller.ex and @api.ex . Take into consideration related modules @arbitrum_view.ex , @l1_batch.ex , @da_multi_purpose_record.ex , @batch_to_da_blob.ex and @api_router.ex .
+> 
 > Do you think that steps described in "Changes in the reader functionality" and "Changes in the controller" will be enough to implement "Proposed solution"?
+> 
 > Think step by step and provide your view on this. Don't implement any changes yet. 
 
 The consequent messages:
 
 > Thanks for recommendation, let's omit them so far. Let's implement the step 1 from "Changes in the reader functionality"
 
-After the previous step I updated the step 1 in the notepad to insert the new function name.
+After the previous prompt the step 1 in the notepad was updated to insert the new function name.
 
 > Let's implement the step 2 from "Changes in the reader functionality"
 
-After the previous step I updated the step 2 in the notepad to insert the new function name.
+After the previous prompt the step 2 in the notepad was updated to insert the new function name.
 
 > Let's implement the step 3 from "Changes in the reader functionality"
 
