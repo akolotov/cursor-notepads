@@ -6,7 +6,7 @@ https://github.com/blockscout/blockscout/pull/11541/commits/7fd870236335990e3152
 
 ## Notes
 
-The Composer mode: agent
+**The Composer mode:** agent
 
 The dialog started with:
 
