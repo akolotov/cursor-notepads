@@ -15,7 +15,7 @@ The dialog started with:
 
 > Take a look at the scections "New DB table and the corresponding Ecto schema", "Data migration implementation", "Changes in batches indexing process" and "Support of new DB schema in API" within "High level scope of changes" and check if you can access to source code of the files referred there?
 
-The consequent messages:
+The consequent prompts:
 
 > Great! Let's start from the step 1 in the "New DB table and the corresponding Ecto schema". The content for the new migration script must be added to @20241217155103_add_data_blobs_to_batches_table.exs .
 
@@ -49,7 +49,7 @@ At this point the changes were committed: https://github.com/blockscout/blocksco
 
 > Write a short comment for `unprocessed_data_query` that covers the idea of the query.
 
-Before the next step I added additional two items in the notepad.
+Before the next prompt additional two items was added in the notepad.
 
 > Perform the steps 3 and 4 from the "Data migration implementation"
 
@@ -67,7 +67,7 @@ It was discovered that the composer struggle with the step description. The corr
 
 > Don't specify `inserted_at` and `updated_at` in `batch_to_blob_record` since they will be inserted automatically during the import operation.
 
-The previous prompts demonstrates that the composer expirienced difficutlties with the proper code generation. That's why lots of adjustments was done manually. The next two prompts were intended to check that the description in the notepad still corresponds to the code that was produced manually. 
+The previous prompts demonstrate that the composer expirienced difficutlties with the proper code generation. That's why lots of adjustments was done manually. The next two prompts were intended to check that the description in the notepad still corresponds to the code that was produced manually. 
 
 > Verify that the current implementation of `Indexer.Fetcher.Arbitrum.DA.Anytrust.prepare_for_import` in @anytrust.ex  inline with requirements defined the step 1 from "Changes in batches indexing process" 
 
