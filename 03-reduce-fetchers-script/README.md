@@ -1,3 +1,7 @@
+## Intro
+
+A new bash script was written with this notepad from scratch.
+
 ## Notes
 
 **Composer mode:** Normal
