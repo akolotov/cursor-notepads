@@ -1,6 +1,6 @@
 ## GitHub changes
 
-The following commit was prepared with the help of the notepad.
+The following commits were prepared with the help of the notepad.
 
 - https://github.com/blockscout/blockscout/pull/11485/commits/7aba4adf4610aa43ba4492a5c6b8219213dee5c2
 - https://github.com/blockscout/blockscout/pull/11485/commits/887dfeae4875b77526fef67add8ed94af156eac7
