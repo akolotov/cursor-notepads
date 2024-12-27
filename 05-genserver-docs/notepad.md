@@ -80,7 +80,7 @@ Based on the call flows above, here is the list of functions that need to be ana
 - `now/0`
 - `do_increase_error_counts/4`
 
-2. List all GenServer handlers (init, handle_call, handle_cast, handle_info) with their full clauses but without implementation. Include everything between `def` and `do`.
+2. List all GenServer handlers (`handle_call`, `handle_cast` and `handle_info` but skip `init` and `start_link`) with their full clauses but without implementation. Include everything between `def` and `do`.
 
 ## Specifications Improvement
 
