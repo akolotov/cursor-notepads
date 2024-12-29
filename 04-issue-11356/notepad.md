@@ -24,13 +24,15 @@ An alternative solution to add a column into the table `arbitrum_l1_batches` to 
 
 ### Data migration implementation
 
-1. Define a new key in `Explorer.Chain.Cache.BackgroundMigrations` (`apps/explorer/lib/explorer/chain/cache/background_migrations.ex`) to reflect the migration status when a migrator task (described in the next step) finishes.
-2. Add a migration sub-module (`Explorer.Migrator.AddressCurrentTokenBalanceTokenType` in `apps/explorer/lib/explorer/migrator/address_current_token_balance_token_type.ex` could be used as an example) which implement behavior of `Explorer.Migrator.FillingMigration` (`apps/explorer/lib/explorer/migrator/filling_migration.ex`) under`Explorer.Migrator`(within the directory`apps/explorer/lib/explorer/migrator`) to:
+1. Define a new key in `Explorer.Chain.Cache.BackgroundMigrations` (`apps/explorer/lib/explorer/chain/cache/background_migrations.ex`) to reflect the migration status when a migrator task (described i[...]
+2. Add a migration sub-module (`Explorer.Migrator.AddressCurrentTokenBalanceTokenType` in `apps/explorer/lib/explorer/migrator/address_current_token_balance_token_type.ex` could be used as an example)[...]
     - find records in `arbitrum_da_multi_purpose` which have no corresponding records in `arbitrum_batches_to_da_blobs`.
     - take `data_key` and `batch_number` from `arbitrum_da_multi_purpose` to insert a record into `arbitrum_batches_to_da_blobs`.
     - define `update_cache` to set the corresponding key in `Explorer.Chain.Cache.BackgroundMigrations` to `true`.
-3. Update the script `apps/explorer/config/config.exs` to enable the new migration process
-4. Update `Explorer.Application.configurable_children` in `apps/explorer/lib/explorer/application.ex` to add the new migration process to the list of the children processes.
+3. Update the script `config/runtime.exs` to enable the new migration process:
+    - For the module `Explorer.Migrator.ArbitrumDaRecordsNormalization` under the application `:explorer`, set the config parameter `enabled` to depend on the current chain type being `:arbitrum`.
+    - Parse two environment variables to apply to the config parameters `concurrency` and `batch_size`, which are used in the module `Explorer.Migrator.ArbitrumDaRecordsNormalization` to build a batch of data for migration in one run of the migrator.
+4. Update `Explorer.Application.configurable_children` in `apps/explorer/lib/explorer/application.ex` to add the new migration process to the list of children processes. The migration process should be enabled only for the `:indexer` app using the function `configure_mode_dependent_process`.
 
 ### Changes in batches indexing process
 
