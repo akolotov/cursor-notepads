@@ -53,6 +53,8 @@ Before the next prompt additional two items was added in the notepad.
 
 > Perform the steps 3 and 4 from the "Data migration implementation"
 
+!!! Actually the prompt above was used for [this version of the notepad](https://github.com/akolotov/cursor-notepads/blob/dd198dc2c2adecb92608837942c9e021ed46a15d/04-issue-11356/notepad.md) - the most recent version of the notepad was adjusted to reflect actual changes in the repo appeared after the code review. !!! 
+
 At this point the changes were committed: https://github.com/blockscout/blockscout/pull/11485/commits/887dfeae4875b77526fef67add8ed94af156eac7
 
 > Implement the step 1 from "Changes in batches indexing process"
