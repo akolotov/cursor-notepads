@@ -24,8 +24,8 @@ An alternative solution to add a column into the table `arbitrum_l1_batches` to 
 
 ### Data migration implementation
 
-1. Define a new key in `Explorer.Chain.Cache.BackgroundMigrations` (`apps/explorer/lib/explorer/chain/cache/background_migrations.ex`) to reflect the migration status when a migrator task (described i[...]
-2. Add a migration sub-module (`Explorer.Migrator.AddressCurrentTokenBalanceTokenType` in `apps/explorer/lib/explorer/migrator/address_current_token_balance_token_type.ex` could be used as an example)[...]
+1. Define a new key in `Explorer.Chain.Cache.BackgroundMigrations` (`apps/explorer/lib/explorer/chain/cache/background_migrations.ex`) to reflect the migration status when a migrator task (described in the next step) finishes.
+ 2. Add a migration sub-module (`Explorer.Migrator.AddressCurrentTokenBalanceTokenType` in `apps/explorer/lib/explorer/migrator/address_current_token_balance_token_type.ex` could be used as an example) which implement behavior of `Explorer.Migrator.FillingMigration` (`apps/explorer/lib/explorer/migrator/filling_migration.ex`) under`Explorer.Migrator`(within the directory`apps/explorer/lib/explorer/migrator`) to:
     - find records in `arbitrum_da_multi_purpose` which have no corresponding records in `arbitrum_batches_to_da_blobs`.
     - take `data_key` and `batch_number` from `arbitrum_da_multi_purpose` to insert a record into `arbitrum_batches_to_da_blobs`.
     - define `update_cache` to set the corresponding key in `Explorer.Chain.Cache.BackgroundMigrations` to `true`.
