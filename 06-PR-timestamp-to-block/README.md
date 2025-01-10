@@ -83,3 +83,17 @@ The following prompts were:
 After that, the suggested text was edited manually. Finally, Claude was prompted with:
 
 > This is my version of the section "Consistency Support" based on yours. Carefully read through it and check that I didn't miss any important part of the implementation, that all meaningful changes are reflected there.
+
+## Final Code Adjustments
+
+The final adjustments of the code resulting from [this commit](https://github.com/blockscout/blockscout/pull/11633/commits/d844dfdeaa86fc12c8f33ab291a5d977e6dcdffc) were done in two separate Cursor chat sessions with the following prompts:
+
+### Chat to modify `null_round_height.ex`
+
+The lines from 127 to 131 of `apps/explorer/lib/explorer/chain/null_round_height.ex` were attached to the chat.
+
+> Looks like this functionality can be replaced by the call of `fetch_neighboring_null_rounds`. Please confirm.
+
+### Chat to modify `general.ex`
+
+> `repo = if from_api, do: Repo.replica(), else: Repo` is met in the module `@general.ex` two times. At the same time, there is a function `Explorer.Chain.select_repo` in `@chain.ex`.
