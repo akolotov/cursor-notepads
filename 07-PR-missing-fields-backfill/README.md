@@ -1,4 +1,4 @@
-## Initial Changes 
+## Initial Changes
 
 Although [naive-notepad.md](naive-notepad.md) was used to produce initial changes, in fact, it was the first time when I tried a notepad to assist me in the coding. That is why this experience could be considered as semi-successful.
 
@@ -90,7 +90,7 @@ Later, after the trivial code review comments addressing a new state of the repo
 
 ## Main Solution Text
 
-The document [notepad-01.md](notepad-01.md) was written manually based on the changes which were produced at the end of the previous section.
+The document [notepad-01.md](notepad-01.md) was written manually based on the changes which were produced at the end of the previous section. The idea of the document was to use it with an LLM-based code assistant to prepare the code changes for the non-trivial comment raised during the code review.
 
 The equivalence of the changes described in the document and the actual code functionality was verified by using the Cursor composer (in the `agent` mode).
 
@@ -170,3 +170,99 @@ At this point, the composer mixed two concepts together, so it was necessary to 
 > Not sure how "with `:transient` restart strategy" correlate with "disabled?" parameter? You extended the sentence explaning why "disabled?" makes sense.
 
 > Take a look at @runtime.exs  and confirm that the functionality described in the section "Backfiller configuration" of notepad-01.md  is implemented. If something important exists in the implementation but absent in the notepad, let me know.
+
+## Address Non-Trivial Code Review Comment
+
+### Code Changes Description Preparation
+
+For a comment received on the code review, another Cursor notepad was prepared: [notepad-02.md](notepad-02.md).
+
+The sections "Problem" and "Proposed Solution" were written manually in Notion, where the "Improve Writing" AI feature was used to polish the language.
+
+The section "High Level Scope of Changes" was prepared with the help of OpenAI's model O1. For this, the following initial prompt was used:
+
+```
+<documents>
+  <document filename="notepad-01.md">
+. . .
+  </document>
+  <document filename="notepad-02.md">
+. . .
+  </document>
+  <document filename="data_backfill.ex">
+. . .
+  </document>
+  <document filename="backfill.ex">
+. . .
+  </document>
+  <document filename="receipts.ex">
+. . .
+  </document>
+  <document filename="by_block_number.ex">
+. . .
+  </document>
+  <document filename="ethereum_jsonrpc.ex">
+. . .
+  </document>
+</documents>
+
+The code above is part of Blockscout backend written in Elixir. 
+
+During the code review of the changes that covered in `notepad-01.md` I received the comment described in `notepad-02.md`. Take a look at the problem in `notepad-02.md` and provide your view on the way how the comment can be addressed. If the problem is not clear for you, raise the questions. If it is clear, suggest the plan for the changes. Don't change the code just provide the plan.
+```
+
+ChatGPT provided a long response with its view on how the code review comment could be addressed. Since its idea was far from ideal, the next suggestion was prompted:
+
+> Thanks for your suggestions. Please take a look at my idea:
+> ****
+> The current implementation calculates the block range based on the `backfill_blocks_depth` configuration parameter in `discover_blocks` for every backfill task. When a task fails during the `fetch_receipts` call, the system schedules the next task for the same end_block but divides the block depth by 2. If it fails again, it continues dividing the block depth by 2 until only one block remains in the range for `fetch_by_block_numbers`. If fetch_receipts fails with a single block, the code falls back to requesting receipts for this block individually using `eth_getTransactionReceipt`.
+> ****
+> What pros and cons do you see?
+
+After that, the sequence of prompts was as follows:
+
+> Suggest the set of changes that it is required in `backfill.ex` to implement my approach. Make sure that you understand how to implement the approach only with changes in this file.
+
+The LLM's response contained the section "Step-by-Step Changes":
+
+> Will you able to re-write your items from 1 to 6 from "Step-by-Step Changes" in form of the steps defined in the section "Changelog" of `notepad-01.md`?
+
+The response after the last prompt was used as a draft for the "High Level Scope of Changes" section. Final adjustments were made manually.
+
+### Applying the changes
+
+With the changes description in `notepad-02.md`, the Cursor composer (_mode_: `agent`, _model_: `claude-3.5-sonnet-20241022`) was involved to implement the required functionality.
+
+The initial prompt was:
+
+> Take a look at the problem in notepad-01.md and then provide your view on the idea in the section "Proposed Solution". If the problem or the solution are not clear for you, raise the questions. If they are clear, take a look at "High Level Scope of Changes" and implement the step 1 from it.
+> 
+> Attaching @common.ex, @block.ex and @receipts.ex
+
+The further set of prompts was:
+
+> The code you suggest does not take into account necesity to divide the transactions params in chunks before invoking `EthereumJSONRPC.Receipts.fetch`
+
+> Implement the step 2 of the section "High Level Scope of Changes" in notepad-02.md
+
+As it is shown from the next prompt, the composer failed to generate optimal code, and that is why very detailed instructions on what exactly needed to be improved were required.
+
+> 1. Consider to implement that clause of `fetch_receipts_with_fallback` which handles the list block numbers as so the list is chunked first and then `EthereumJSONRPC.Receipts.fetch_by_block_numbers` is called in  `reduce_while`. From my perspective, it will simplify the logic of calling `fetch_receipts_with_fallback` recursevly:
+> - chunk the list
+> - iterate `fetch_by_block_numbers` by `reduce_while`
+> - if `fetch_by_block_numbers` fails, divide the chunk size by two and pass the current chunk as the list of blocks to the next call of `fetch_receipts_with_fallback`.
+>
+> 2. It make sense to pass for arguments to `fetch_receipts_with_fallback`:
+> - the list of blocks
+> - `json_rpc_named_arguments`
+> - the current chunk size
+> - original chunk size passed from `fetch_blocks`.
+> The fourth argument will be used for that clause of `fetch_receipts_with_fallback` which handles single block. It will be passed to `fetch_individual_receipts`.
+
+Final prompts were just cosmetic adjustments:
+
+> Looks like `fetch_receipts` is not required anymore since it just wraps `fetch_receipts_with_fallback`. Plan the changes to simplify the code.
+
+> Should the new logic to collect the receipts must be reflected in the module documentation?
+
+The resulting changes, almost without additional modifications, were [committed](https://github.com/blockscout/blockscout/pull/11163/commits/a3c078a1007183c5b73fa06a8794cb198ee54315).
